@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geo_luggage_mystery/screens/signin_screen.dart';
 import 'package:geo_luggage_mystery/screens/signup_screen.dart';
+import 'package:geo_luggage_mystery/theme/theme.dart';
 import 'package:geo_luggage_mystery/widgets/custom_scaffold.dart';
 import 'package:geo_luggage_mystery/widgets/welcome_button.dart';
 
@@ -43,13 +44,13 @@ class WelcomeScreen extends StatelessWidget {
             ),
             ),
           )),
-          const Flexible(
+           Flexible(
             flex: 1,
               child: Align(
                 alignment: Alignment.bottomRight,
                 child: Row(
                   children: [
-                    Expanded(
+                    const Expanded(
                       child:
                         WelcomeButton(
                           buttonText: 'Sign in',
@@ -62,9 +63,9 @@ class WelcomeScreen extends StatelessWidget {
                       child:
                       WelcomeButton(
                         buttonText: 'Sign up',
-                        onTap: SignupScreen(),
+                        onTap: const SignUpScreen(),
                         color: Colors.white ,
-                        textColor: Colors.black ,
+                        textColor: lightColorScheme.primary ,
                       ),
                     ),
                   ],
