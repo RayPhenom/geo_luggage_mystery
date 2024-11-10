@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:geo_luggage_mystery/screens/welcome_screen.dart';
-import 'package:geo_luggage_mystery/screens/home_screen.dart'; // Your home screen
+import 'package:geo_luggage_mystery/pages/main/main_screen.dart';
+import 'package:geo_luggage_mystery/screens/welcome_screen.dart'; // Your home screen
 import 'package:geo_luggage_mystery/theme/theme.dart';
 
 void main() {
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Geo Luggage',
       theme: lightMode,
-      home: _isUserLoggedIn() ? const HomeScreen() : const WelcomeScreen(),
+      home: _isUserLoggedIn() ? const MainScreen() : const WelcomeScreen(),
     );
   }
 }

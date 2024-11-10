@@ -39,6 +39,8 @@ dependencies:
   flutter_screenutil: ^5.9.3
   dots_indicator: ^3.0.0 
   carousel_slider_x: ^6.0.3
+  fluttertoast: 
+  carousel_slider: 
   google_maps_polyline: ^1.0.3
   google_maps_controller: ^1.2.0
   google_maps_flutter_android: ^2.14.11
