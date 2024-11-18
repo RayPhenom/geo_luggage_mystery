@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "217806099786",
+    "project_id": "geo-lugsetup",
+    "storage_bucket": "geo-lugsetup.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217806099786:android:42ccc19d57e05838c29db3",
+        "android_client_info": {
+          "package_name": "com.example.geo_luggage_mystery"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpMY7qki6zB9vcAc99qUunHQIs62H7Urg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

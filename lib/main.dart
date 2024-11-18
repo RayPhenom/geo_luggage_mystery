@@ -1,21 +1,34 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geo_luggage_mystery/pages/main/main_screen.dart';
-import 'package:geo_luggage_mystery/screens/welcome_screen.dart'; // Your home screen
+import 'package:geo_luggage_mystery/screens/welcome_screen.dart'; 
 import 'package:geo_luggage_mystery/theme/theme.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (kIsWeb) {
+   await Firebase.initializeApp(
+        options: const FirebaseOptions(
+            apiKey: "AIzaSyBzSOBC8gT4kj_nmwnkbxtnQc0ik-Eov-0",
+            authDomain: "geo-lugsetup.firebaseapp.com",
+            projectId: "geo-lugsetup",
+            storageBucket: "geo-lugsetup.firebasestorage.app",
+            messagingSenderId: "217806099786",
+            appId: "1:217806099786:web:db2276ea6a880c6cc29db3"));
+  } else {
+    await Firebase.initializeApp();
+  }
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This function simulates checking if the user is logged in.
-  // Replace with actual logic for retrieving login state.
   bool _isUserLoggedIn() {
-    // Here, use your method to check login status
-    // For example, SharedPreferences, a provider, or some other state management tool.
-    return false; // Set to true if user is logged in, false otherwise
+    
+    return false; 
   }
 
   @override

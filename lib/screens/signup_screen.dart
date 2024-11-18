@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:geo_luggage_mystery/screens/signin_screen.dart';
 import 'package:icons_plus/icons_plus.dart';
-
-
 import '../theme/theme.dart';
 import '../widgets/custom_scaffold.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+  final String? initialFullName;
+  final String? initialEmail;
+  final String? initialPassword;
+
+  const SignUpScreen({super.key,
+    this.initialFullName,
+    this.initialEmail,
+    this.initialPassword,
+  });
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -16,6 +22,17 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formSignupKey = GlobalKey<FormState>();
   bool agreePersonalData = true;
+
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _fullNameController.text = widget.initialFullName ?? '';
+    _emailController.text = widget.initialEmail ?? '';
+    _passwordController.text = widget.initialPassword ?? '';
+  }
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
