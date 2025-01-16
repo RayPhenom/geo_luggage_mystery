@@ -3,13 +3,17 @@ import 'package:geo_luggage_mystery/screens/signin_screen.dart';
 import 'package:icons_plus/icons_plus.dart';
 import '../theme/theme.dart';
 import '../widgets/custom_scaffold.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+//import '../firebase_options.dart';
 
 class SignUpScreen extends StatefulWidget {
   final String? initialFullName;
   final String? initialEmail;
   final String? initialPassword;
 
-  const SignUpScreen({super.key,
+  const SignUpScreen({
+    super.key,
     this.initialFullName,
     this.initialEmail,
     this.initialPassword,
@@ -22,17 +26,74 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formSignupKey = GlobalKey<FormState>();
   bool agreePersonalData = true;
+  bool _isLoading = false;
 
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     _fullNameController.text = widget.initialFullName ?? '';
     _emailController.text = widget.initialEmail ?? '';
     _passwordController.text = widget.initialPassword ?? '';
+    _initializeFirebase();
   }
+
+  Future<void> _initializeFirebase() async {
+    await Firebase.initializeApp(
+      //options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
+
+  Future<void> _signUpWithEmailAndPassword() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+      // User successfully signed up
+      _showSuccessSnackBar('Sign up successful!');
+      // Navigate to the next screen or perform other actions
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        _showErrorSnackBar('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        _showErrorSnackBar('The account already exists for that email.');
+      } else {
+        _showErrorSnackBar('An error occurred: ${e.message}');
+      }
+    } catch (e) {
+      _showErrorSnackBar('An unexpected error occurred: $e');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
+  void _showSuccessSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.green,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -76,6 +137,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       // full name
                       TextFormField(
+                        controller: _fullNameController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Full name';
@@ -107,9 +169,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       // email
                       TextFormField(
+                        controller: _emailController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Email';
+                          }
+                          if (!value.contains('@')) {
+                            return 'Please enter a valid email';
                           }
                           return null;
                         },
@@ -138,11 +204,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       // password
                       TextFormField(
+                        controller: _passwordController,
                         obscureText: true,
                         obscuringCharacter: '*',
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Password';
+                          }
+                          if (value.length < 6) {
+                            return 'Password must be at least 6 characters';
                           }
                           return null;
                         },
@@ -203,20 +273,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: _isLoading
+                              ? null
+                              : () {
                             if (_formSignupKey.currentState!.validate() &&
                                 agreePersonalData) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Processing Data'),
-                                ),
-                              );
+                              _signUpWithEmailAndPassword();
                             } else if (!agreePersonalData) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Please agree to the processing of personal data')),
-                              );
+                              _showErrorSnackBar(
+                                  'Please agree to the processing of personal data');
                             }
                           },
                           child: const Text('Sign up'),

@@ -1,7 +1,8 @@
+
 plugins {
     id "com.android.application"
     id "kotlin-android"
-    id "dev.flutter.flutter-gradle-plugin"
+    id 'dev.flutter.flutter-gradle-plugin'
     id 'com.google.gms.google-services'
 }
 
@@ -22,9 +23,9 @@ android {
     defaultConfig {
         applicationId = "com.example.geo_luggage_mystery"
          minSdkVersion 23
-        targetSdkVersion 33 
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        targetSdkVersion 33
+        versionCode 1
+        versionName = "1.0.0"
     }
 
     buildTypes {
