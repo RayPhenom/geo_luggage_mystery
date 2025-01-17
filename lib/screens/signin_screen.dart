@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geo_luggage_mystery/screens/signup_screen.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../pages/main/main_screen.dart';
 import '../theme/theme.dart';
 import '../widgets/custom_scaffold.dart';
-import '../pages/home/home_screen.dart'; // Import your home screen
+import 'package:geo_luggage_mystery/pages/main/main_screen.dart' show MainScreen;
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -17,29 +19,30 @@ class _SignInScreenState extends State<SignInScreen> {
   final _formSignInKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController _resetEmailController = TextEditingController();
   bool rememberPassword = false;
-  bool _isLoading = false; // Add a loading state
+  bool _isLoading = false;
 
-  // Firebase Authentication instance
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Sign in method
   Future<void> _signInWithEmailAndPassword() async {
     setState(() {
-      _isLoading = true; // Start loading
+      _isLoading = true;
     });
     try {
       await _auth.signInWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
-      // Navigate to the home screen after successful login
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
-      );
+      if (mounted) {
+        // Navigate to the main screen after successful login
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MainScreen()), // Navigate to MainScreen
+        );
+      }
     } on FirebaseAuthException catch (e) {
-      String errorMessage = 'An error occurred.';
+      String errorMessage = 'Wrong Username or Password.';
       if (e.code == 'user-not-found') {
         errorMessage = 'No user found for that email.';
       } else if (e.code == 'wrong-password') {
@@ -49,17 +52,119 @@ class _SignInScreenState extends State<SignInScreen> {
       } else if (e.code == 'user-disabled') {
         errorMessage = 'This user account has been disabled.';
       }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(errorMessage)),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorMessage)),
+        );
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An unexpected error occurred: $e')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('An unexpected error occurred: $e')),
+        );
+      }
     } finally {
-      setState(() {
-        _isLoading = false; // Stop loading
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _resetPassword() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('Reset Password'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                controller: _resetEmailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  hintText: 'Enter your email',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email';
+                  }
+                  if (!value.contains('@')) {
+                    return 'Please enter a valid email';
+                  }
+                  return null;
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (_resetEmailController.text.trim().isEmpty) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text(
+                              'Please enter your email to reset password.')),
+                    );
+                  }
+                  return;
+                }
+                try {
+                  await _auth.sendPasswordResetEmail(
+                      email: _resetEmailController.text.trim());
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text(
+                              'Password reset email sent. Check your inbox.')),
+                    );
+                  }
+                  if (mounted) {
+                    Navigator.of(dialogContext).pop();
+                  }
+                } on FirebaseAuthException catch (e) {
+                  String errorMessage = 'An error occurred.';
+                  if (e.code == 'user-not-found') {
+                    errorMessage = 'No user found for that email.';
+                  } else if (e.code == 'invalid-email') {
+                    errorMessage = 'The email address is badly formatted.';
+                  }
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(errorMessage)),
+                    );
+                  }
+                } catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                          content: Text('An unexpected error occurred: $e')),
+                    );
+                  }
+                }
+              },
+              child: const Text('Send'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri)) {
+      throw Exception('Could not launch $uri');
     }
   }
 
@@ -118,13 +223,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           border: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
+                              color: Colors.black12,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -151,13 +250,13 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           border: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
+                              color: Colors.black12,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
+                              color: Colors.black12,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -189,6 +288,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             ],
                           ),
                           GestureDetector(
+                            onTap: _resetPassword, // Call the reset password method
                             child: Text(
                               'Forget password?',
                               style: TextStyle(
