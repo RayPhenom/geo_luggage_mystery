@@ -51,6 +51,8 @@ dependencies:
   firebase_auth: ^5.3.3
   url_launcher: ^6.1.6
   shared_preferences: ^2.2.2
+  shared_preferences_foundation:
+  http: ^1.2.2
  
   
 

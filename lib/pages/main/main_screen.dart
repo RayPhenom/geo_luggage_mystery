@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:geo_luggage_mystery/pages/bookings/bookings.dart';
+import 'package:geo_luggage_mystery/pages/help/help.dart';
 import 'package:geo_luggage_mystery/pages/home/home_screen.dart';
 import 'package:geo_luggage_mystery/pages/menu/menu.dart';
 import 'package:geo_luggage_mystery/pages/parcels/parcels.dart';
+import 'package:geo_luggage_mystery/pages/help/help.dart' show HelpScreen;
+
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -20,7 +23,8 @@ class _MainScreenState extends State<MainScreen> {
       const HomeScreen(),
       const BookingsScreen(),
       const MenuScreen(),
-      const ParcelsScreen()
+      const ParcelsScreen(),
+      const HelpScreen()
     ];
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
@@ -33,11 +37,10 @@ class _MainScreenState extends State<MainScreen> {
         selectedItemColor: Colors.blue,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home_filled, color: Colors.red,), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.directions_bus, color: Colors.red), label: "Bookings"),
+          BottomNavigationBarItem(icon: Icon(Icons.directions_bus, color: Colors.red), label: "Bookings"),
           BottomNavigationBarItem(icon: Icon(Icons.apps, color: Colors.red), label: "Menu"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.card_giftcard, color: Colors.red), label: "Parcels"),
+          BottomNavigationBarItem(icon: Icon(Icons.card_giftcard, color: Colors.red), label: "Parcels"),
+          BottomNavigationBarItem(icon: Icon(Icons.question_mark, color: Colors.red), label: "Help"),
         ],
         currentIndex: _currIndex,
       ),

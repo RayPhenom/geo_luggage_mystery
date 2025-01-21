@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -10,11 +12,23 @@ class ParcelsScreen extends StatefulWidget {
 
 class _ParcelsScreenState extends State<ParcelsScreen> {
   late GoogleMapController myController;
-
+  final Completer<GoogleMapController> _controller =
+  Completer<GoogleMapController>();
   final LatLng _center = const LatLng(-1.0986984, 36.9666969);
+  bool _isMapLoaded = false;
 
   void _onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
     myController = controller;
+    setState(() {
+      _isMapLoaded = true;
+    });
+  }
+
+  @override
+  void dispose() {
+    myController.dispose();
+    super.dispose();
   }
 
   @override
@@ -94,22 +108,17 @@ class _ParcelsScreenState extends State<ParcelsScreen> {
 
   Widget _buildMap() {
     // Implement map widget
-    return Container(
+    return SizedBox(
       height: 800.0,
-      color: Colors.grey[300],
-      child: Center(
-        child: Stack(
-          children: <Widget>[
-            GoogleMap(
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: _center,
-                zoom: 10.0,
-              ),
-            )
-          ],
+      child: _isMapLoaded
+          ? GoogleMap(
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: CameraPosition(
+          target: _center,
+          zoom: 10.0,
         ),
-      ),
+      )
+          : const Center(child: CircularProgressIndicator()),
     );
   }
 }

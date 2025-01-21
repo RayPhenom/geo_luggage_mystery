@@ -50,52 +50,54 @@ class MenuScreen extends StatelessWidget {
               ],
             ),
           ),
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                ListTile(
-                  leading: const Icon(
-                    Icons.bus_alert,
-                    size: 30,
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: const Icon(
+                      Icons.bus_alert,
+                      size: 30,
+                    ),
+                    title: Text(
+                      "Leaving from",
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
+                    subtitle: const Text("Where you are traveling from"),
                   ),
-                  title: Text(
-                    "Leaving from",
-                    style: Theme.of(context).textTheme.headlineMedium,
+                  ListTile(
+                    leading: const Icon(
+                      Icons.business,
+                      size: 30,
+                    ),
+                    title: Text(
+                      "Going to",
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
+                    subtitle: const Text("Where you are traveling to"),
                   ),
-                  trailing: const Icon(Icons.chevron_right),
-                  subtitle: const Text("Where you are traveling from"),
-                ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.business,
-                    size: 30,
+                  ListTile(
+                    leading: const Icon(
+                      Icons.calendar_month,
+                      size: 30,
+                    ),
+                    title: Text(
+                      "Travel date",
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
+                    subtitle: const Text("Date you will be traveling"),
                   ),
-                  title: Text(
-                    "Going to",
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  trailing: const Icon(Icons.chevron_right),
-                  subtitle: const Text("Where you are traveling to"),
-                ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.calendar_month,
-                    size: 30,
-                  ),
-                  title: Text(
-                    "Travel date",
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  trailing: const Icon(Icons.chevron_right),
-                  subtitle: const Text("Date you will be traveling"),
-                ),
-                Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    width: double.infinity,
-                    child: ElevatedButton(
-                        onPressed: () {}, child: const Text("Search buses"))),
-                const SizedBox(width: 500, child: Adverts())
-              ],
+                  Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      width: double.infinity,
+                      child: ElevatedButton(
+                          onPressed: () {}, child: const Text("Search buses"))),
+                  const SizedBox(width: 500, child: Adverts())
+                ],
+              ),
             ),
           )
         ],

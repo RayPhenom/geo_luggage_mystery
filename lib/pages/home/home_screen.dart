@@ -7,51 +7,52 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          DecoratedBox(
-            decoration: const BoxDecoration(color: Colors.red),
-            child: Column(
-              children: [
-                Image.asset("assets/images/logo.png", fit: BoxFit.contain),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  margin: const EdgeInsets.all(10),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(50)),
-                  ),
-                  child: Container(
+      resizeToAvoidBottomInset: false, // Add this line
+      body: SingleChildScrollView( // Wrap the Column with SingleChildScrollView
+        child: Column(
+          children: [
+            DecoratedBox(
+              decoration: const BoxDecoration(color: Colors.red),
+              child: Column(
+                children: [
+                  Image.asset("assets/images/logo.png", fit: BoxFit.contain),
+                  Container(
                     padding: const EdgeInsets.all(10),
-                    margin: const EdgeInsets.symmetric(horizontal: 40),
+                    margin: const EdgeInsets.all(10),
                     decoration: const BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(50)),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.directions_bus,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(width: 30),
-                        Text(
-                          "One way",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge
-                              ?.copyWith(color: Colors.white),
-                        )
-                      ],
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.symmetric(horizontal: 40),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.directions_bus,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 30),
+                          Text(
+                            "One way",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(color: Colors.white),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
-          ),
-          SingleChildScrollView(
-            child: Column(
+            Column(
               children: [
                 ListTile(
                   leading: const Icon(
@@ -97,8 +98,8 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(width: 500, child: Adverts())
               ],
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }
