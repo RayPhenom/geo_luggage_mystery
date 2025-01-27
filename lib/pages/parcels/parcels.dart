@@ -1,7 +1,8 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter/services.dart';
+//import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class ParcelsScreen extends StatefulWidget {
   const ParcelsScreen({super.key});
@@ -16,6 +17,42 @@ class _ParcelsScreenState extends State<ParcelsScreen> {
   Completer<GoogleMapController>();
   final LatLng _center = const LatLng(-1.0986984, 36.9666969);
   bool _isMapLoaded = false;
+  String _scanBarcode = 'Luggage';
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  // Function to scan QR code/RFID
+// This function initiates the QR code scanning process.
+  Future<void> scanQR() async {
+    // Declare a variable to store the result of the scan.
+    String barcodeScanRes;
+
+    // Use a try-catch block to handle potential errors during scanning.
+    try {
+      // Call the scanBarcode method from the FlutterBarcodeScanner package to initiate the scan.
+      // '#ff6666' specifies the color of the scan line.
+      // 'Cancel' is the text displayed on the cancel button.
+      // true enables the flash.
+      // ScanMode.QR specifies that we are scanning for QR codes.
+      //barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+         // '#ff6666', 'Cancel', true, ScanMode.QR);
+    } on PlatformException {
+      // If a PlatformException occurs, set the result to an error message.
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+
+    // Check if the widget is still mounted before updating the state.
+    // This prevents errors if the widget has been disposed of.
+    if (!mounted) return;
+
+    // Update the state with the result of the scan.
+    setState(() {
+     // _scanBarcode = barcodeScanRes;
+    });
+  }
 
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
@@ -71,7 +108,7 @@ class _ParcelsScreenState extends State<ParcelsScreen> {
                 ),
               ),
               const SizedBox(height: 10.0),
-              _buildRFIDDetails(),
+              _buildRFIDDetails(), // InkWell to trigger scanQR
               const SizedBox(height: 20.0),
               const Text(
                 'Map:',
@@ -90,24 +127,24 @@ class _ParcelsScreenState extends State<ParcelsScreen> {
   }
 
   Widget _buildSenderDetails() {
-    // Implement sender details widget
     return const Text(
         'Sender Name: Onix Lumumba\nSender Address: 206-20116 Gilgil, Kenya\nSender Contact: +254706935045');
   }
 
   Widget _buildReceiverDetails() {
-    // Implement receiver details widget
     return const Text(
         'Receiver Name: Sammie Barasa\nReceiver Address: 256 Kisumu, Kisumu, Kenya\nReceiver Contact: +254725153581');
   }
 
+  // Widget with InkWell to trigger QR/RFID scan
   Widget _buildRFIDDetails() {
-    // Implement RFID details widget
-    return const Text("RFID Tag 1: Hw-126");
+    return InkWell(
+        onTap: () => scanQR(), // Call scanQR on tap
+        child: Text('RFID Luggage_1: $_scanBarcode\n',
+            style: const TextStyle(color: Colors.blue)));
   }
 
   Widget _buildMap() {
-    // Implement map widget
     return SizedBox(
       height: 800.0,
       child: _isMapLoaded

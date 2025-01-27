@@ -31,7 +31,7 @@ class HelpScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             const Text(
-              'Here you can find answers to frequently asked questions and get assistance.',
+              'Here you find answers to frequently asked questions and get assistance.',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
@@ -105,7 +105,6 @@ class HelpScreen extends StatelessWidget {
             // Phone
             InkWell(
               onTap: () {
-                // Navigate to a specific URL or screen for Phone
                 _launchURL('tel:+254706935045');
               },
               child: const ListTile(

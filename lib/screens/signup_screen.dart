@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geo_luggage_mystery/screens/signin_screen.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../theme/theme.dart';
 import '../widgets/custom_scaffold.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,6 +28,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _formSignupKey = GlobalKey<FormState>();
   bool agreePersonalData = true;
   bool _isLoading = false;
+
+  _launchURL(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -327,12 +336,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Logo(Logos.facebook_f),
-                          Logo(Logos.twitch),
-                          Logo(Logos.google),
-                          Logo(Logos.apple),
+                          InkWell(
+                            onTap: () => _launchURL('https://www.facebook.com/'), // Replace with Facebook sign-up URL
+                            child: Logo(Logos.facebook_f),
+                          ),
+                          InkWell(
+                            onTap: () => _launchURL('https://www.twitch.tv/'), // Replace with Twitch sign-up URL
+                            child: Logo(Logos.twitch),
+                          ),
+                          InkWell(
+                            onTap: () => _launchURL('https://accounts.google.com/signup'), // Replace with Google sign-up URL
+                            child: Logo(Logos.google),
+                          ),
+                          InkWell(
+                            onTap: () => _launchURL('https://appleid.apple.com/account'), // Replace with Apple sign-up URL
+                            child: Logo(Logos.apple),
+                          ),
                         ],
                       ),
+
                       const SizedBox(
                         height: 25.0,
                       ),

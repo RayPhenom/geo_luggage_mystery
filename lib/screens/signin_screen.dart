@@ -35,11 +35,12 @@ class _SignInScreenState extends State<SignInScreen> {
         password: passwordController.text.trim(),
       );
       if (mounted) {
-        // Navigate to the main screen after successful login
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const MainScreen()), // Navigate to MainScreen
-        );
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const MainScreen()),
+          );
+        });
       }
     } on FirebaseAuthException catch (e) {
       String errorMessage = 'Wrong Username or Password.';
@@ -357,12 +358,25 @@ class _SignInScreenState extends State<SignInScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Logo(Logos.facebook_f),
-                          Logo(Logos.twitch),
-                          Logo(Logos.google),
-                          Logo(Logos.apple),
+                          InkWell(
+                            onTap: () => _launchURL('https://www.facebook.com/'),
+                            child: Logo(Logos.facebook_f),
+                          ),
+                          InkWell(
+                            onTap: () => _launchURL('https://www.twitch.tv/'),
+                            child: Logo(Logos.twitch),
+                          ),
+                          InkWell(
+                            onTap: () => _launchURL('https://accounts.google.com/signup'),
+                            child: Logo(Logos.google),
+                          ),
+                          InkWell(
+                            onTap: () => _launchURL('https://appleid.apple.com/account'),
+                            child: Logo(Logos.apple),
+                          ),
                         ],
                       ),
+
                       const SizedBox(
                         height: 25.0,
                       ),

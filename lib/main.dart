@@ -88,10 +88,10 @@ class ThemeSwitcher extends InheritedWidget {
   final void Function(ThemeMode) changeTheme;
 
   const ThemeSwitcher({
-    Key? key,
+    super.key,
     required this.changeTheme,
-    required Widget child,
-  }) : super(key: key, child: child);
+    required super.child,
+  });
 
   static ThemeSwitcher? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<ThemeSwitcher>();
