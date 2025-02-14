@@ -26,6 +26,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> _signInWithEmailAndPassword() async {
+    await Future.delayed(const Duration(seconds: 1));
     setState(() {
       _isLoading = true;
     });
@@ -359,15 +360,15 @@ class _SignInScreenState extends State<SignInScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           InkWell(
-                            onTap: () => _launchURL('https://www.facebook.com/'),
+                            onTap: () => _launchURL('https://www.facebook.com/signin'),
                             child: Logo(Logos.facebook_f),
                           ),
                           InkWell(
-                            onTap: () => _launchURL('https://www.twitch.tv/'),
+                            onTap: () => _launchURL('https://www.twitch.tv/signin'),
                             child: Logo(Logos.twitch),
                           ),
                           InkWell(
-                            onTap: () => _launchURL('https://accounts.google.com/signup'),
+                            onTap: () => _launchURL('https://accounts.google.com/signin'),
                             child: Logo(Logos.google),
                           ),
                           InkWell(

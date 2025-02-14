@@ -16,7 +16,7 @@ class BookingsScreen extends StatelessWidget {
             tabs: [
               Tab(icon: Icon(Icons.directions_car), text: "Upcoming",),
               Tab(icon: Icon(Icons.directions_transit), text: "Past",),
-              Tab(icon: Icon(Icons.directions_bike), text: "Canceled",),
+              Tab(icon: Icon(Icons.disabled_by_default_rounded), text: "Canceled",),
             ],
           ),
         ),

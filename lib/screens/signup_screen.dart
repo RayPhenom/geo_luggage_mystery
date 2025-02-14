@@ -337,19 +337,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           InkWell(
-                            onTap: () => _launchURL('https://www.facebook.com/'), // Replace with Facebook sign-up URL
+                            onTap: () => _launchURL('https://www.facebook.com/signup'),
                             child: Logo(Logos.facebook_f),
                           ),
                           InkWell(
-                            onTap: () => _launchURL('https://www.twitch.tv/'), // Replace with Twitch sign-up URL
+                            onTap: () => _launchURL('https://www.twitch.tv/signup'),
                             child: Logo(Logos.twitch),
                           ),
                           InkWell(
-                            onTap: () => _launchURL('https://accounts.google.com/signup'), // Replace with Google sign-up URL
+                            onTap: () => _launchURL('https://accounts.google.com/signup'),
                             child: Logo(Logos.google),
                           ),
                           InkWell(
-                            onTap: () => _launchURL('https://appleid.apple.com/account'), // Replace with Apple sign-up URL
+                            onTap: () => _launchURL('https://appleid.apple.com/account'),
                             child: Logo(Logos.apple),
                           ),
                         ],
